@@ -1,1 +1,1 @@
-required_columns = ["open", "high", "low", "close", "adjusted close", "volume"]
+required_columns = ["code", "open", "high", "low", "close", "adjusted close", "volume"]

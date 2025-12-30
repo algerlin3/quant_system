@@ -33,6 +33,7 @@ def fetch_from_yfinance(
     )
 
     df = df[["open", "high", "low", "close", "adjusted close", "volume"]]
+    df['code'] = symbol
     df.index.name = "datetime"
 
     return df
