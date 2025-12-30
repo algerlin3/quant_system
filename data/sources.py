@@ -14,6 +14,7 @@ def fetch_from_yfinance(
         interval=interval,
         auto_adjust=False,
         progress=False,
+        multi_level_index=False,
     )
 
     if df.empty:
@@ -26,11 +27,12 @@ def fetch_from_yfinance(
             "High": "high",
             "Low": "low",
             "Close": "close",
+            "Adj Close": "adjusted close",
             "Volume": "volume",
         }
     )
 
-    df = df[["open", "high", "low", "close", "volume"]]
+    df = df[["open", "high", "low", "close", "adjusted close", "volume"]]
     df.index.name = "datetime"
 
     return df
