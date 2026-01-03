@@ -1,5 +1,6 @@
 from pathlib import Path
 import pandas as pd
+from utils.data_utils import ensure_datetime_column
 
 CACHE_DIR = Path(__file__).parent / "raw_data"
 
@@ -9,7 +10,7 @@ def _cache_path(
     end: str,
     source: str,
 ) -> Path:
-    filename = f"{symbol}_{start}_{end}_{source}.csv"
+    filename = f"{symbol}_{start}_{end}_{source}.parquet"
     return CACHE_DIR / filename
 
 def load_from_cache(
@@ -20,7 +21,9 @@ def load_from_cache(
 ) -> pd.DataFrame | None:
     path = _cache_path(symbol, start, end, source)
     if path.exists():
-        return pd.read_csv(path, index_col=0, parse_dates=True)
+        df = pd.read_parquet(path)
+        # enforce datetime column on load
+        return ensure_datetime_column(df)
     return None
 
 def save_to_cache(
@@ -30,6 +33,8 @@ def save_to_cache(
     end: str,
     source: str,
 ):
-    CACHE_DIR.mkdir(exist_ok=True)
+    CACHE_DIR.mkdir(exist_ok=True, parents=True)
     path = _cache_path(symbol, start, end, source)
-    df.to_csv(path)
+    df_to_write = ensure_datetime_column(df)
+    # always write datetime as a column (no index)
+    df_to_write.to_parquet(path, index=False)

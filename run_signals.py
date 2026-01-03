@@ -22,8 +22,8 @@ def main():
     df_factors = zscore(df_factors, factor_cols=FACTOR_NAMES)
 
     z_cols = [f + "_z" for f in FACTOR_NAMES]
-    df_factors = generate_simple_signal(df_factors, z_cols)
+    df_signals = generate_simple_signal(df_factors, z_cols)
 
-    print(df_factors[df_factors['signal'] != 0])
+    print(df_signals[df_signals['signal'] != 0])
 if __name__ == "__main__":
     main()
